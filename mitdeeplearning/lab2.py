@@ -19,11 +19,7 @@ def plot_image_prediction(i, predictions_array, true_label, img):
   plt.imshow(np.squeeze(img), cmap=plt.cm.binary)
 
   predicted_label = np.argmax(predictions_array)
-  if predicted_label == true_label:
-    color = 'blue'
-  else:
-    color = 'red'
-
+  color = 'blue' if predicted_label == true_label else 'red'
   plt.xlabel("{} {:2.0f}% ({})".format(predicted_label,
                                 100*np.max(predictions_array),
                                 true_label),
@@ -91,17 +87,17 @@ class TrainingDatasetLoader(object):
 
 
 def get_test_faces():
-    cwd = os.path.dirname(__file__)
-    images = {
-        "LF": [],
-        "LM": [],
-        "DF": [],
-        "DM": []
-    }
-    for key in images.keys():
-        files = glob.glob(os.path.join(cwd, "data", "faces", key, "*.png"))
-        for file in sorted(files):
-            image = cv2.resize(cv2.imread(file), (64,64))[:,:,::-1]/255.
-            images[key].append(image)
+  cwd = os.path.dirname(__file__)
+  images = {
+      "LF": [],
+      "LM": [],
+      "DF": [],
+      "DM": []
+  }
+  for key, value in images.items():
+    files = glob.glob(os.path.join(cwd, "data", "faces", key, "*.png"))
+    for file in sorted(files):
+      image = cv2.resize(cv2.imread(file), (64,64))[:,:,::-1]/255.
+      value.append(image)
 
-    return images["LF"], images["LM"], images["DF"], images["DM"]
+  return images["LF"], images["LM"], images["DF"], images["DM"]

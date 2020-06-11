@@ -6,12 +6,14 @@ import numpy as np
 
 def play_video(filename):
     encoded = base64.b64encode(io.open(filename, 'r+b').read())
-    embedded = HTML(data='''
+    return HTML(
+        data='''
         <video controls>
             <source src="data:video/mp4;base64,{0}" type="video/mp4" />
-        </video>'''.format(encoded.decode('ascii')))
-
-    return embedded
+        </video>'''.format(
+            encoded.decode('ascii')
+        )
+    )
 
 def preprocess_pong(image):
     I = image[35:195] # Crop
@@ -45,10 +47,7 @@ def save_video_of_model(model, env_name, obs_diff=False, pp_fn=None):
         frame = env.render(mode='rgb_array')
         output_video.writeFrame(frame)
 
-        if obs_diff:
-            input_obs = obs - prev_obs
-        else:
-            input_obs = obs
+        input_obs = obs - prev_obs if obs_diff else obs
         action = model(np.expand_dims(input_obs, 0)).numpy().argmax()
 
         prev_obs = obs
