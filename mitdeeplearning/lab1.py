@@ -13,8 +13,7 @@ cwd = os.path.dirname(__file__)
 def load_training_data():
     with open(os.path.join(cwd, "data", "irish.abc"), "r") as f:
         text = f.read()
-    songs = extract_song_snippet(text)
-    return songs
+    return extract_song_snippet(text)
 
 def extract_song_snippet(text):
     pattern = '\n\n(.*?)\n\n'
